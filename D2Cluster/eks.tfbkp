@@ -1,0 +1,40 @@
+resource "aws_eks_cluster" "prathapeks" {
+  name     = "prathapeks"
+  role_arn = aws_iam_role.prathapeks.arn
+  version = "1.26"
+  vpc_config {
+    # subnet_ids = [aws_subnet.example1.id, aws_subnet.example2.id]
+
+    #subnet_ids = [aws_subnet.public[0].id,aws_subnet.public[1].id,aws_subnet.public[2].id]
+
+     subnet_ids = aws_subnet.private[*].id
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
+  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
+  depends_on = [
+    aws_iam_role_policy_attachment.prathapeks-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.prathapeks-AmazonEKSVPCResourceController,
+  ]
+}
+
+# fargate provisioning
+resource "aws_eks_fargate_profile" "prathapeks" {
+  cluster_name           = aws_eks_cluster.prathapeks.name
+  fargate_profile_name   = "prathapeksfargate"
+  pod_execution_role_arn = aws_iam_role.prathapfargate.arn
+  subnet_ids             = aws_subnet.private[*].id
+
+  selector {
+    namespace = "prathapfargate"
+  }
+}
+
+output "endpoint" {
+  value = aws_eks_cluster.prathapeks.endpoint
+}
+
+output "kubeconfig-certificate-authority-data" {
+  value = aws_eks_cluster.prathapeks.certificate_authority[0].data
+}
+
