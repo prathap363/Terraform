@@ -1,2 +1,2 @@
 D2Cluster/.terraform/providers/*
-terraform.tfstate
+D2Cluster/terraform.tfstate
