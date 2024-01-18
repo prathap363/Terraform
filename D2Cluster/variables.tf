@@ -162,6 +162,13 @@ variable "rds_instance_class" {
   default = "db.t3.micro"
 }
 
+variable "efs_csi_drive" {
+  default = "enabled"
+}
+
+variable "enable_coredns_fargate" {
+  default = "false"
+}
 
 
 

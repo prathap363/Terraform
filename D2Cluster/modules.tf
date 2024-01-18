@@ -73,10 +73,15 @@ module "fargate_profile" {
   }
 }
 
+########################################################################################################################################
+#  EKS Fargate profile for core dns- You must enable it if you are only using fargate profile and not using the manged eks node group -#
+#########################
+
 
 module "fargate_profile_coredns" {
   source = "terraform-aws-modules/eks/aws//modules/fargate-profile"
-
+  
+  create = var.enable_coredns_fargate
   name         = "coredns"
   cluster_name = module.eks.cluster_name
 

@@ -2,7 +2,7 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: efs-sc
+  name: fgcustom
 provisioner: efs.csi.aws.com
 ---
 apiVersion: v1
@@ -16,7 +16,7 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: efs-sc
+  storageClassName: fgcustom
   csi:
     driver: efs.csi.aws.com
     volumeHandle: fs-095f553c680478063::fsap-022a3d01d518fcdee
@@ -29,7 +29,7 @@ metadata:
 spec:
   accessModes:
   - ReadWriteMany
-  storageClassName: efs-sc
+  storageClassName: fgcustom
   resources:
     requests:
       storage: 5Gi
