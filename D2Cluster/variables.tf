@@ -120,6 +120,13 @@ variable "fargate_profile_namespace" {
   description = "Kubernets fargate profile namespace to be used for creating fargate configs in EKS cluster"
 }
 
+variable "create_managed_node_for_eks" {
+  description = "Kubernets fargate profile namespace to be used for creating fargate configs in EKS cluster"
+}
+variable "manged_nodes_instance_type" {
+  description = "Kubernets fargate profile namespace to be used for creating fargate configs in EKS cluster"
+}
+
 variable "accesspoints" {
   type    = list(string)
   default = ["dcs","dbr","dcc"]

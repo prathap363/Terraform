@@ -1,16 +1,16 @@
-# module "attach_efs_csi_role" {
-#   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+module "attach_efs_csi_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-#   role_name             = "efs-csi"
-#   attach_efs_csi_policy = true
+  role_name             = "efs-csi"
+  attach_efs_csi_policy = true
 
-#   oidc_providers = {
-#     ex = {
-#       provider_arn               = module.eks.oidc_provider_arn
-#       namespace_service_accounts = ["kube-system:efs-csi-controller-sa"]
-#     }
-#   }
-# }
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:efs-csi-controller-sa"]
+    }
+  }
+}
 
 ################
 #  EKS MODULE  #
@@ -21,6 +21,7 @@ module "eks" {
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
+  
 
   cluster_endpoint_public_access = true
 
@@ -48,9 +49,9 @@ module "eks" {
 }
 
 
-################
-#  EKS MODULE  #
-################
+#########################
+#  EKS Fargate profile  #
+#########################
 
 
 
@@ -94,6 +95,65 @@ module "fargate_profile_coredns" {
     project = var.project_name
   }
 }
+
+module "eks_managed_node_group" {
+  source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
+  create = var.create_managed_node_for_eks
+  name            = "separate-eks-mng"
+  cluster_name    = module.eks.cluster_name
+  cluster_version = var.cluster_version
+  enable_monitoring = false
+  ami_type = "AL2_x86_64"
+  iam_role_attach_cni_policy = true
+
+  create_launch_template = true
+
+  subnet_ids = aws_subnet.private[*].id
+
+  // The following variables are necessary if you decide to use the module outside of the parent EKS module context.
+  // Without it, the security groups of the nodes are empty and thus won't join the cluster.
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  vpc_security_group_ids            = [module.eks.node_security_group_id]
+
+  // Note: `disk_size`, and `remote_access` can only be set when using the EKS managed node group default launch template
+  // This module defaults to providing a custom launch template to allow for custom security groups, tag propagation, etc.
+  // use_custom_launch_template = false
+  // disk_size = 50
+  //
+  //  # Remote access cannot be specified with a launch template
+  //  remote_access = {
+  //    ec2_ssh_key               = module.key_pair.key_pair_name
+  //    source_security_group_ids = [aws_security_group.remote_access.id]
+  //  }
+
+  min_size     = 1
+  max_size     = 3
+  desired_size = 2
+
+  instance_types = [var.manged_nodes_instance_type]
+  capacity_type  = "SPOT"
+
+  labels = {
+    Environment = "test"
+    GithubRepo  = "terraform-aws-eks"
+    GithubOrg   = "terraform-aws-modules"
+  }
+
+  # taints = {
+  #   dedicated = {
+  #     key    = "dedicated"
+  #     value  = "gpuGroup"
+  #     effect = "NO_SCHEDULE"
+  #   }
+  # }
+
+  tags = {
+    Environment = "dev"
+    Terraform   = "true"
+  }
+}
+
+
 
 
 ################################

@@ -13,7 +13,7 @@ resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name       = var.project_name
+    Name       = "${var.project_name}-Internet gateway"
     managed-by = "terraform"
   }
 }
@@ -30,7 +30,7 @@ resource "aws_nat_gateway" "nat" {
 
 
   tags = {
-    Name = "gw NAT"
+    Name = "${var.project_name}-NAT Gateway"
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
@@ -43,7 +43,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name       = var.project_name
+    Name       = "${var.project_name}-public"
     managed-by = "terraform"
   }
 }
@@ -52,7 +52,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name       = var.project_name
+    Name       = "${var.project_name}-private"
     managed-by = "terraform"
   }
 }
@@ -85,7 +85,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name       = var.project_name
+    Name       = "${var.project_name}-public"
     managed-by = "terraform"
   }
 }
@@ -102,7 +102,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name       = var.project_name
+    Name       = "${var.project_name}-private"
     managed-by = "terraform"
   }
 }
