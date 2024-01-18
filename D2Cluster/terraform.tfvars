@@ -1,11 +1,11 @@
 ## See variables.tf for descriptions
 
-project_name = "ece-terraform-example"
+project_name = "d2cluster-terraform"
 
 trusted_network = "172.17.0.3/32"
 # AWS provider settings
-aws_access_key = "AKIAVOJ2SUSA3LGBOWOV"
-aws_secret_key = "guKcpLcBe9+PJu5RHBhvPd6xPBDOaYuf9DOKfDl4"
+aws_access_key = "AKIAUEYXB5WWDVIW3B4E"
+aws_secret_key = "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"
 aws_region = "us-east-1"
 cluster_name = "prathapeks"
 cluster_version = "1.26"

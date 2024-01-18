@@ -84,9 +84,9 @@ module "fargate_profile_coredns" {
     namespace = "kube-system"
   }]
   
-  depends_on = [
-    module.fargate_profile
-  ]
+  # depends_on = [
+  #   module.fargate_profile.fargate_profile_id
+  # ]
 
   tags = {
     Environment = "dev"
