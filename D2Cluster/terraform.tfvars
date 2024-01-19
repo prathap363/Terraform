@@ -3,9 +3,7 @@
 project_name = "d2cluster-terraform"
 
 trusted_network = "172.17.0.3/32"
-# AWS provider settings
-aws_access_key            = "AKIAXQ27Y6JBEWPNA2GD"
-aws_secret_key            = "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"
+# AWS  settings
 aws_region                = "us-east-1"
 cluster_name              = "prathapeks"
 cluster_version           = "1.26"

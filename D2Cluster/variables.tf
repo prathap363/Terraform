@@ -12,13 +12,13 @@ variable "project_name" {
   description = "An idenfitying name used for names of cloud resources"
 }
 
-variable "aws_access_key" {
-  description = "AWS access key"
-}
+# variable "aws_access_key" {
+#   description = "AWS access key"
+# }
 
-variable "aws_secret_key" {
-  description = "AWS secret key"
-}
+# variable "aws_secret_key" {
+#   description = "AWS secret key"
+# }
 
 #######################################################
 ######### Variables you may want to configure #########
