@@ -18,7 +18,7 @@ terraform {
 
 
 provider "aws" {
-  region  = var.aws_region
+  region = var.aws_region
   # You can use access keys
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
@@ -32,7 +32,7 @@ provider "helm" {
     cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name ]
+      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
       command     = "aws"
     }
   }

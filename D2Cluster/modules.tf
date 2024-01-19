@@ -21,7 +21,7 @@ module "eks" {
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
-  
+
 
   cluster_endpoint_public_access = true
 
@@ -69,7 +69,7 @@ module "fargate_profile" {
   tags = {
     Environment = "dev"
     Terraform   = "true"
-    project = var.project_name
+    project     = var.project_name
   }
 }
 
@@ -80,8 +80,8 @@ module "fargate_profile" {
 
 module "fargate_profile_coredns" {
   source = "terraform-aws-modules/eks/aws//modules/fargate-profile"
-  
-  create = var.enable_coredns_fargate
+
+  create       = var.enable_coredns_fargate
   name         = "coredns"
   cluster_name = module.eks.cluster_name
 
@@ -89,7 +89,7 @@ module "fargate_profile_coredns" {
   selectors = [{
     namespace = "kube-system"
   }]
-  
+
   # depends_on = [
   #   module.fargate_profile.fargate_profile_id
   # ]
@@ -97,18 +97,18 @@ module "fargate_profile_coredns" {
   tags = {
     Environment = "dev"
     Terraform   = "true"
-    project = var.project_name
+    project     = var.project_name
   }
 }
 
 module "eks_managed_node_group" {
-  source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-  create = var.create_managed_node_for_eks
-  name            = "separate-eks-mng"
-  cluster_name    = module.eks.cluster_name
-  cluster_version = var.cluster_version
-  enable_monitoring = false
-  ami_type = "AL2_x86_64"
+  source                     = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
+  create                     = var.create_managed_node_for_eks
+  name                       = "separate-eks-mng"
+  cluster_name               = module.eks.cluster_name
+  cluster_version            = var.cluster_version
+  enable_monitoring          = false
+  ami_type                   = "AL2_x86_64"
   iam_role_attach_cni_policy = true
 
   create_launch_template = true
@@ -205,15 +205,15 @@ module "db" {
   # Enable creation of monitoring IAM role
   create_monitoring_role = true
 
-  identifier = var.rds_instance_name
-  engine               = "postgres"
-  engine_version       = "15.3"
-  family               = "postgres15" # DB parameter group
-  major_engine_version = "15.6"         # DB option group
-  instance_class       = var.rds_instance_class
-  allocated_storage     = 5
-  max_allocated_storage = 10
-  publicly_accessible    = false
+  identifier                  = var.rds_instance_name
+  engine                      = "postgres"
+  engine_version              = "15.3"
+  family                      = "postgres15" # DB parameter group
+  major_engine_version        = "15.6"       # DB option group
+  instance_class              = var.rds_instance_class
+  allocated_storage           = 5
+  max_allocated_storage       = 10
+  publicly_accessible         = false
   manage_master_user_password = false
 
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
@@ -234,16 +234,16 @@ module "db" {
 
   # Enhanced Monitoring - see example for details on how to create the role
   # by yourself, in case you don't want to create it automatically
-  monitoring_interval    = "30"
-  monitoring_role_name   = "MyRDSMonitoringRole"
+  monitoring_interval  = "30"
+  monitoring_role_name = "MyRDSMonitoringRole"
 
 
   tags = {
     Environment = "dev"
     Terraform   = "true"
-    project = var.project_name
+    project     = var.project_name
   }
-  subnet_ids             = aws_subnet.private[*].id
+  subnet_ids = aws_subnet.private[*].id
 
   # Database Deletion Protection
   deletion_protection = false
@@ -269,7 +269,7 @@ module "db" {
 
 # module "cluster" {
 #   source  = "terraform-aws-modules/rds-aurora/aws"
-  
+
 #   create = true
 
 #   #Creation of subnet group - provide a subnet group
@@ -331,7 +331,7 @@ module "db" {
 
 
 module "aurora" {
-  source  = "terraform-aws-modules/rds-aurora/aws"
+  source = "terraform-aws-modules/rds-aurora/aws"
 
   create = false
 
@@ -344,11 +344,11 @@ module "aurora" {
   # Disable creation of monitoring IAM role - provide a role ARN
   create_monitoring_role = false
 
-  name            = var.aurora_instance_name
-  engine          = "aurora-postgresql"
-  engine_version  = "15.3"
-  master_username = "devdbadmin"
-  master_password = "Password_123"
+  name                        = var.aurora_instance_name
+  engine                      = "aurora-postgresql"
+  engine_version              = "15.3"
+  master_username             = "devdbadmin"
+  master_password             = "Password_123"
   manage_master_user_password = false
   instances = {
     1 = {
@@ -356,18 +356,18 @@ module "aurora" {
       publicly_accessible     = true
       db_parameter_group_name = "default.aurora-postgresql15"
     }
-#     2 = {
-# #      identifier     = "static-member-1"
-#       instance_class = "db.r5.2xlarge"
-#       publicly_accessible     = true
-#       db_parameter_group_name = "default.aurora-postgresql15"
-#     }
-#     3 = {
-# #      identifier     = "excluded-member-1"
-#       instance_class = "db.r5.2xlarge"
-#       publicly_accessible     = true
-#       db_parameter_group_name = "default.aurora-postgresql15"
-#     }
+    #     2 = {
+    # #      identifier     = "static-member-1"
+    #       instance_class = "db.r5.2xlarge"
+    #       publicly_accessible     = true
+    #       db_parameter_group_name = "default.aurora-postgresql15"
+    #     }
+    #     3 = {
+    # #      identifier     = "excluded-member-1"
+    #       instance_class = "db.r5.2xlarge"
+    #       publicly_accessible     = true
+    #       db_parameter_group_name = "default.aurora-postgresql15"
+    #     }
   }
 
   # endpoints = {
@@ -401,8 +401,8 @@ module "aurora" {
   apply_immediately   = true
   skip_final_snapshot = true
 
-  create_db_cluster_parameter_group      = true
-  
+  create_db_cluster_parameter_group = true
+
   db_cluster_parameter_group_family      = "aurora-postgresql15"
   db_cluster_parameter_group_description = "${var.aurora_instance_name} example cluster parameter group"
   db_cluster_parameter_group_parameters = [
@@ -432,13 +432,13 @@ module "aurora" {
   enabled_cloudwatch_logs_exports = ["postgresql"]
   create_cloudwatch_log_group     = false
 
-  create_db_cluster_activity_stream     = false
+  create_db_cluster_activity_stream = false
   # db_cluster_activity_stream_kms_key_id = module.kms.key_id
   # db_cluster_activity_stream_mode       = "async"
 
   tags = {
     Environment = "dev"
     Terraform   = "true"
-    project = var.project_name
+    project     = var.project_name
   }
 }

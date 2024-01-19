@@ -3,10 +3,10 @@ resource "aws_efs_file_system" "dctmefs" {
 }
 
 resource "aws_efs_mount_target" "mount" {
-    count = length(aws_subnet.private.*.id)
-    file_system_id = aws_efs_file_system.dctmefs.id
-    subnet_id = aws_subnet.private[count.index].id
-    security_groups = [aws_security_group.efs.id]
+  count           = length(aws_subnet.private.*.id)
+  file_system_id  = aws_efs_file_system.dctmefs.id
+  subnet_id       = aws_subnet.private[count.index].id
+  security_groups = [aws_security_group.efs.id]
 }
 
 resource "aws_efs_access_point" "access-point" {
@@ -14,12 +14,12 @@ resource "aws_efs_access_point" "access-point" {
 
   count = length(var.accesspoints)
 
-  
+
   tags = {
     Name       = element(var.accesspoints, count.index)
     managed-by = "terraform"
   }
-  
+
 
   posix_user {
     gid = 1000
