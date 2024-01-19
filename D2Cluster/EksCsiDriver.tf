@@ -1,17 +1,17 @@
 
 resource "helm_release" "aws_efs_controller" {
 
-  
+
   name       = "aws-efs-csi-driver"
   repository = "https://kubernetes-sigs.github.io/aws-efs-csi-driver/"
   chart      = "aws-efs-csi-driver"
   namespace  = "kube-system"
   version    = "2.5.3"
 
-#   set {
-#     name  = "clusterName"
-#     value = module.eks.cluster_id
-#   }
+  #   set {
+  #     name  = "clusterName"
+  #     value = module.eks.cluster_id
+  #   }
 
   set {
     name  = "image.repository"
@@ -38,8 +38,8 @@ resource "helm_release" "aws_efs_controller" {
     value = "efs-csi-controller-sa"
   }
 
-    depends_on = [
-    var.efs_csi_drive 
+  depends_on = [
+    var.efs_csi_drive
   ]
 
 }

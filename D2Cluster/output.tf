@@ -27,5 +27,5 @@ output "AuroraDBName" {
 }
 
 output "AccessPoint-Mapping" {
-  value = {for s in aws_efs_access_point.access-point : substr(s.root_directory[0].path, 1, -1) => s.id}
+  value = { for s in aws_efs_access_point.access-point : substr(s.root_directory[0].path, 1, -1) => s.id }
 }

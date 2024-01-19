@@ -5,11 +5,11 @@ resource "aws_security_group" "efs" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description      = "nfs"
-    from_port        = 2049
-    to_port          = 2049
-    protocol         = "TCP"
-    cidr_blocks      = [var.cidr]
+    description = "nfs"
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "TCP"
+    cidr_blocks = [var.cidr]
   }
 
   egress {
@@ -31,8 +31,8 @@ resource "aws_security_group" "db" {
     from_port   = 5432
     to_port     = 5432
     description = "PostgreSQL access from within VPC"
-    protocol         = "TCP"
-    cidr_blocks      = [var.cidr]
+    protocol    = "TCP"
+    cidr_blocks = [var.cidr]
   }
 
   egress {
