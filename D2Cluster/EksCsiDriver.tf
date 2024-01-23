@@ -15,7 +15,7 @@ resource "helm_release" "aws_efs_controller" {
 
   set {
     name  = "image.repository"
-    value = "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-efs-csi-driver"
+    value = "602401143452.dkr.ecr.${var.aws_region}.amazonaws.com/eks/aws-efs-csi-driver"
   }
 
   set {
